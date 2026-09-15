@@ -1158,55 +1158,68 @@ pt(b)
 
 function calcProbability(force){
 
-let left=Object.values(counts)
-.reduce((a,b)=>a+b,0);
+    const bpEl = document.getElementById("bp");
+    const ppEl = document.getElementById("pp");
+    const tpEl = document.getElementById("tp");
 
-if(left<10){
+    const left = Object.values(counts)
+        .reduce((a,b)=>a+b,0);
 
-bp.textContent=
-pp.textContent=
-tp.textContent="—";
+    if(left < 10){
 
-return;
+        bpEl.textContent = "—";
+        ppEl.textContent = "—";
+        tpEl.textContent = "—";
 
-}
+        return;
+    }
 
-let N=
-force?
-30000:
-12000;
+    const N = force ? 30000 : 12000;
 
-let res={
-P:0,
-B:0,
-T:0
-};
+    const res = {
+        P:0,
+        B:0,
+        T:0
+    };
 
-for(let i=0;i<N;i++){
+    for(let i=0;i<N;i++){
 
-res[
-simulateOnce()
-]++;
+        const result = simulateOnce();
 
-}
+        if(result === "P"){
+            res.P++;
+        }
+        else if(result === "B"){
+            res.B++;
+        }
+        else{
+            res.T++;
+        }
 
-let s=
-res.P+
-res.B+
-res.T;
+    }
 
-bp.textContent=
-(res.B/s*100)
-.toFixed(2)+"%";
+    const total =
+        res.P +
+        res.B +
+        res.T;
 
-pp.textContent=
-(res.P/s*100)
-.toFixed(2)+"%";
+    if(total === 0){
 
-tp.textContent=
-(res.T/s*100)
-.toFixed(2)+"%";
+        bpEl.textContent = "—";
+        ppEl.textContent = "—";
+        tpEl.textContent = "—";
 
+        return;
+    }
+
+    bpEl.textContent =
+        (res.B / total * 100).toFixed(2) + "%";
+
+    ppEl.textContent =
+        (res.P / total * 100).toFixed(2) + "%";
+
+    tpEl.textContent =
+        (res.T / total * 100).toFixed(2) + "%";
 }
 
 function saveBet(){
