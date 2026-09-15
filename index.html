@@ -358,8 +358,9 @@ gap:5px
 <div>
 <label>牌靴</label>
 <select id="decks">
+<option value="unknown" selected>未知靴數</option>
 <option value="6">6 靴</option>
-<option value="8" selected>8 靴</option>
+<option value="8">8 靴</option>
 </select>
 </div>
 
@@ -570,13 +571,23 @@ let road=[];
 let totalProfit=0;
 
 function newCounts(decks){
-let c={};
-VALUES.forEach(v=>c[v]=4*decks);
-return c;
+
+    let c={};
+
+    VALUES.forEach(v=>{
+        c[v]=decks==="unknown" ? 4 : 4*Number(decks);
+    });
+
+    return c;
 }
 
 function shoeSize(){
-return Number(decks.value)*52;
+
+    if(decks.value==="unknown"){
+        return null;
+    }
+
+    return Number(decks.value)*52;
 }
 
 function save(){
@@ -601,7 +612,7 @@ localStorage.getItem("baccarat_full_v2")
 );
 
 if(x){
-decks.value=x.decks||"8";
+decks.value=x.decks||"unknown";
 counts=x.counts||newCounts(Number(decks.value));
 rounds=x.rounds||[];
 road=x.road||[];
@@ -616,7 +627,7 @@ return false;
 
 function resetState(){
 
-counts=newCounts(Number(decks.value));
+counts=newCounts(decks.value);
 rounds=[];
 inputP=[];
 inputB=[];
@@ -1092,13 +1103,13 @@ return false;
 
 }
 
-function simulateOnce(){
+function simulateOnce(sourceCounts=counts){
 
 let deck=[];
 
 VALUES.forEach(v=>{
 
-for(let i=0;i<counts[v];i++){
+for(let i=0;i<sourceCounts[v];i++){
 
 deck.push(v);
 
@@ -1162,63 +1173,125 @@ function calcProbability(force){
     const ppEl = document.getElementById("pp");
     const tpEl = document.getElementById("tp");
 
-    const left = Object.values(counts)
-        .reduce((a,b)=>a+b,0);
+    const directionElOld = document.getElementById("directionResult");
 
-    if(left < 10){
+    const roundCount = rounds.length;
+
+    // 至少 5 局才開始分析
+    if(roundCount < 5){
+
         bpEl.textContent = "—";
         ppEl.textContent = "—";
         tpEl.textContent = "—";
+
+        if(directionElOld){
+            directionElOld.innerHTML =
+                "<div style='font-size:13px;opacity:.7;margin-bottom:5px;'>分析狀態</div>" +
+                "<div style='font-size:22px;font-weight:bold;'>⏳ 資料不足</div>" +
+                "<div style='margin-top:7px;'>" +
+                "目前已記錄 " + roundCount + " 局，還需要 " +
+                (5-roundCount) + " 局" +
+                "</div>";
+        }
+
         return;
     }
 
-    // 模擬次數
-    const N = force ? 30000 : 12000;
+    // 根據已記錄牌面建立指定靴數的剩餘牌
+    function buildModelCounts(decksNum){
 
-    const res = {
-        P:0,
-        B:0,
-        T:0
-    };
+        const c = {};
 
-    for(let i=0;i<N;i++){
+        VALUES.forEach(v=>{
+            c[v] = 4 * decksNum;
+        });
 
-        const result = simulateOnce();
+        for(const r of rounds){
 
-        if(result === "P"){
-            res.P++;
+            for(const card of r.pCards){
+                if(c[card] !== undefined){
+                    c[card]--;
+                }
+            }
+
+            for(const card of r.bCards){
+                if(c[card] !== undefined){
+                    c[card]--;
+                }
+            }
         }
-        else if(result === "B"){
-            res.B++;
-        }
-        else{
-            res.T++;
-        }
+
+        return c;
     }
 
-    const total = res.P + res.B + res.T;
+    // 執行一個靴數模型
+    function runModel(modelCounts){
 
-    if(total === 0){
-        bpEl.textContent = "—";
-        ppEl.textContent = "—";
-        tpEl.textContent = "—";
-        return;
+        const N = force ? 30000 : 12000;
+
+        const res = {
+            P:0,
+            B:0,
+            T:0
+        };
+
+        for(let i=0;i<N;i++){
+
+            const result = simulateOnce(modelCounts);
+
+            if(result==="P"){
+                res.P++;
+            }
+            else if(result==="B"){
+                res.B++;
+            }
+            else{
+                res.T++;
+            }
+        }
+
+        const total = res.P + res.B + res.T;
+
+        return {
+            P:res.P / total * 100,
+            B:res.B / total * 100,
+            T:res.T / total * 100
+        };
     }
 
-    const banker = res.B / total * 100;
-    const player = res.P / total * 100;
-    const tie = res.T / total * 100;
+    let result;
 
-    // 顯示基本機率
+    // 未知靴數：同時計算 6 靴與 8 靴
+    if(decks.value==="unknown"){
+
+        const model6 = runModel(buildModelCounts(6));
+        const model8 = runModel(buildModelCounts(8));
+
+        // 6靴與8靴平均
+        result = {
+            P:(model6.P + model8.P) / 2,
+            B:(model6.B + model8.B) / 2,
+            T:(model6.T + model8.T) / 2
+        };
+
+    }
+    else{
+
+        // 指定 6 靴或 8 靴
+        result = runModel(counts);
+    }
+
+    const banker = result.B;
+    const player = result.P;
+    const tie = result.T;
+
     bpEl.textContent = banker.toFixed(2) + "%";
     ppEl.textContent = player.toFixed(2) + "%";
     tpEl.textContent = tie.toFixed(2) + "%";
 
-    // 莊閒差距
     const diff = banker - player;
     const absDiff = Math.abs(diff);
 
-    // 判斷目前方向
     let direction = "";
     let level = "";
 
@@ -1239,8 +1312,7 @@ function calcProbability(force){
         level = "差距較大";
     }
 
-    // 尋找方向顯示區
-    let directionEl = document.getElementById("directionResult");
+    let directionEl = directionElOld;
 
     if(!directionEl){
 
@@ -1255,7 +1327,8 @@ function calcProbability(force){
         directionEl.style.textAlign = "center";
         directionEl.style.fontSize = "16px";
 
-        const probabilityBox = bpEl.closest(".card") || bpEl.parentElement;
+        const probabilityBox =
+            bpEl.closest(".card") || bpEl.parentElement;
 
         if(probabilityBox){
             probabilityBox.appendChild(directionEl);
@@ -1264,17 +1337,26 @@ function calcProbability(force){
 
     directionEl.innerHTML =
         "<div style='font-size:13px;opacity:.7;margin-bottom:5px;'>目前方向</div>" +
+
         "<div style='font-size:22px;font-weight:bold;'>" +
         direction +
         "</div>" +
+
         "<div style='margin-top:7px;'>" +
         "莊－閒：<b>" +
         (diff >= 0 ? "+" : "") +
         diff.toFixed(2) +
         "%</b>" +
         "</div>" +
+
         "<div style='font-size:12px;opacity:.6;margin-top:4px;'>" +
         level +
+        "</div>" +
+
+        "<div style='font-size:11px;opacity:.5;margin-top:8px;'>" +
+        (decks.value==="unknown"
+            ? "未知靴數｜6靴＋8靴模型綜合估算"
+            : decks.value + "靴模型") +
         "</div>";
 }
 
