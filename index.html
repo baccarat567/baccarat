@@ -6,266 +6,1276 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>百家樂牌靴助手</title>
+
 <style>
-:root{--bg:#0b0d10;--panel:#171a1f;--panel2:#22262d;--line:#343a43;--txt:#f7f7f8;--muted:#a5abb5;--blue:#5d70ee;--red:#e35d68;--green:#48c58a;--gold:#d7a83d}
+:root{
+--bg:#0b0d10;
+--panel:#171a1f;
+--panel2:#22262d;
+--line:#343a43;
+--txt:#f7f7f8;
+--muted:#a5abb5;
+--blue:#5d70ee;
+--red:#e35d68;
+--green:#48c58a;
+--gold:#d7a83d
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;padding:env(safe-area-inset-top) 14px 40px}
-.wrap{max-width:680px;margin:auto}
-h1{font-size:29px;margin:18px 0 6px} h2{font-size:18px;margin:0 0 12px}
-.sub{color:var(--muted);font-size:13px;margin-bottom:14px}
-.card{background:var(--panel);border:1px solid #272c33;border-radius:17px;padding:15px;margin:12px 0}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
-select,input{width:100%;background:var(--panel2);color:var(--txt);border:1px solid #444a53;border-radius:12px;padding:12px;font-size:17px;outline:none}
-button{border:0;border-radius:12px;padding:13px 10px;color:white;background:var(--blue);font-size:16px;font-weight:750;width:100%;margin-top:9px}
-button:active{opacity:.82;transform:scale(.99)}
-.secondary{background:#343a43}.danger{background:#8d3540}.green{background:#287d59}.gold{background:#765d22}
-.cards{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cards button{margin:0;padding:11px 3px;font-size:16px;background:#2b3038}
-.cards button.picked{background:var(--blue)}
-.side-title{font-size:14px;color:var(--muted);margin:10px 0 7px}
-.selected{min-height:42px;padding:10px;border-radius:10px;background:#111318;border:1px dashed #3c424b;font-size:18px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat{background:var(--panel2);border-radius:12px;text-align:center;padding:11px 4px}
-.stat span{display:block;color:var(--muted);font-size:12px}.stat b{display:block;font-size:22px;margin-top:4px}
-.result{text-align:center;background:var(--panel2);border-radius:13px;padding:16px;font-size:23px;font-weight:800}
-.result small{display:block;color:var(--muted);font-size:13px;font-weight:500;margin-top:7px}
-.prob{background:var(--panel2);border-radius:12px;text-align:center;padding:11px 4px}
-.prob span{display:block;color:var(--muted);font-size:12px}.prob b{font-size:22px}
-.P{color:#7694ff}.B{color:#ff747e}.T{color:#58d69b}
-.roadbox{overflow:auto}.road{display:grid;grid-auto-flow:column;grid-template-rows:repeat(6,31px);grid-auto-columns:31px;gap:4px;width:max-content;min-height:206px}
-.cell{width:31px;height:31px;border-radius:50%;border:1px solid #343941;display:flex;align-items:center;justify-content:center;font-size:11px;position:relative}
-.cell.P{border:2px solid #5e7fff}.cell.B{border:2px solid #ed6570}.cell.T{border:2px solid #55ce92}
-.tie{position:absolute;right:-6px;top:-7px;min-width:15px;height:15px;line-height:15px;text-align:center;background:#55ce92;color:#07150d;border-radius:8px;font-size:10px}
-.history{max-height:300px;overflow:auto}.hist{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #2a2e34;padding:9px 2px;font-size:13px}.hist .right{text-align:right;white-space:nowrap}
-.note{color:#8e96a1;font-size:12px;line-height:1.5;margin-top:8px}
-.money{font-size:24px;font-weight:800}.pos{color:var(--green)}.neg{color:var(--red)}
-@media(max-width:390px){.cards{gap:4px}.cards button{font-size:14px}.grid3{gap:5px}}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;
+padding:env(safe-area-inset-top) 14px 40px
+}
+
+.wrap{
+max-width:680px;
+margin:auto
+}
+
+h1{
+font-size:29px;
+margin:18px 0 6px
+}
+
+h2{
+font-size:18px;
+margin:0 0 12px
+}
+
+.sub{
+color:var(--muted);
+font-size:13px;
+margin-bottom:14px
+}
+
+.card{
+background:var(--panel);
+border:1px solid #272c33;
+border-radius:17px;
+padding:15px;
+margin:12px 0
+}
+
+.grid2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
+}
+
+.grid3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px
+}
+
+label{
+display:block;
+color:var(--muted);
+font-size:13px;
+margin-bottom:6px
+}
+
+select,input{
+width:100%;
+background:var(--panel2);
+color:var(--txt);
+border:1px solid #444a53;
+border-radius:12px;
+padding:12px;
+font-size:17px;
+outline:none
+}
+
+button{
+border:0;
+border-radius:12px;
+padding:13px 10px;
+color:white;
+background:var(--blue);
+font-size:16px;
+font-weight:750;
+width:100%;
+margin-top:9px
+}
+
+button:active{
+opacity:.82;
+transform:scale(.99)
+}
+
+.secondary{
+background:#343a43
+}
+
+.danger{
+background:#8d3540
+}
+
+.green{
+background:#287d59
+}
+
+.gold{
+background:#765d22
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:6px;
+margin-top:8px;
+margin-bottom:10px
+}
+
+.cards button{
+margin:0;
+padding:11px 3px;
+font-size:16px;
+background:#2b3038
+}
+
+.cards button:disabled{
+opacity:.35
+}
+
+.cards button.picked{
+background:var(--blue)
+}
+
+.side-title{
+font-size:14px;
+color:var(--muted);
+margin:10px 0 7px
+}
+
+.selected{
+min-height:42px;
+padding:10px;
+border-radius:10px;
+background:#111318;
+border:1px dashed #3c424b;
+font-size:18px
+}
+
+.actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px
+}
+
+.stat{
+background:var(--panel2);
+border-radius:12px;
+text-align:center;
+padding:11px 4px
+}
+
+.stat span{
+display:block;
+color:var(--muted);
+font-size:12px
+}
+
+.stat b{
+display:block;
+font-size:22px;
+margin-top:4px
+}
+
+.result{
+text-align:center;
+background:var(--panel2);
+border-radius:13px;
+padding:16px;
+font-size:23px;
+font-weight:800
+}
+
+.result small{
+display:block;
+color:var(--muted);
+font-size:13px;
+font-weight:500;
+margin-top:7px
+}
+
+.prob{
+background:var(--panel2);
+border-radius:12px;
+text-align:center;
+padding:11px 4px
+}
+
+.prob span{
+display:block;
+color:var(--muted);
+font-size:12px
+}
+
+.prob b{
+font-size:22px
+}
+
+.P{
+color:#7694ff
+}
+
+.B{
+color:#ff747e
+}
+
+.T{
+color:#58d69b
+}
+
+.roadbox{
+overflow:auto
+}
+
+.road{
+display:grid;
+grid-auto-flow:column;
+grid-template-rows:repeat(6,31px);
+grid-auto-columns:31px;
+gap:4px;
+width:max-content;
+min-height:206px
+}
+
+.cell{
+width:31px;
+height:31px;
+border-radius:50%;
+border:1px solid #343941;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:10px;
+position:relative
+}
+
+.cell.P{
+border:2px solid #5e7fff
+}
+
+.cell.B{
+border:2px solid #ed6570
+}
+
+.cell.T{
+border:2px solid #55ce92
+}
+
+.tie{
+position:absolute;
+right:-6px;
+top:-7px;
+min-width:15px;
+height:15px;
+line-height:15px;
+text-align:center;
+background:#55ce92;
+color:#07150d;
+border-radius:8px;
+font-size:10px
+}
+
+.history{
+max-height:300px;
+overflow:auto
+}
+
+.hist{
+display:flex;
+justify-content:space-between;
+gap:8px;
+border-bottom:1px solid #2a2e34;
+padding:9px 2px;
+font-size:13px
+}
+
+.hist .right{
+text-align:right;
+white-space:nowrap
+}
+
+.note{
+color:#8e96a1;
+font-size:12px;
+line-height:1.5;
+margin-top:8px
+}
+
+.money{
+font-size:24px;
+font-weight:800
+}
+
+.pos{
+color:var(--green)
+}
+
+.neg{
+color:var(--red)
+}
+
+@media(max-width:390px){
+.cards{
+gap:4px
+}
+
+.cards button{
+font-size:14px
+}
+
+.grid3{
+gap:5px
+}
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
 <h1>🃏 百家樂牌靴助手</h1>
-<div class="sub">牌靴追蹤・大路・剩餘牌機率・投注紀錄</div>
+
+<div class="sub">
+牌靴追蹤・大路・剩餘牌機率・投注紀錄
+</div>
 
 <div class="card">
+
 <h2>① 牌靴設定</h2>
+
 <div class="grid2">
-<div><label>牌靴</label><select id="decks"><option value="6">6 靴</option><option value="8" selected>8 靴</option></select></div>
-<div><label>剩餘牌</label><input id="remain" readonly></div>
+
+<div>
+<label>牌靴</label>
+<select id="decks">
+<option value="6">6 靴</option>
+<option value="8" selected>8 靴</option>
+</select>
 </div>
+
+<div>
+<label>剩餘牌</label>
+<input id="remain" readonly>
+</div>
+
+</div>
+
 <div class="actions">
-<button class="danger" onclick="resetAll()">重置整靴</button>
-<button class="secondary" onclick="undo()">↩️ 撤銷上一局</button>
+
+<button class="danger" onclick="resetAll()">
+重置整靴
+</button>
+
+<button class="secondary" onclick="undo()">
+↩️ 撤銷上一局
+</button>
+
 </div>
-<div class="note">每種牌每靴各 4 張；A=1、2～9=牌面、10/J/Q/K=0。</div>
+
+<div class="note">
+每種牌每靴各 4 張；A=1、2～9=牌面、10/J/Q/K=0。
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>② 輸入本局牌面</h2>
-<div class="side-title">閒牌 <span id="pCount">0/3</span></div>
-<div class="selected" id="pSel">尚未選牌</div>
+
+<div class="side-title">
+閒牌 <span id="pCount">0/3</span>
+</div>
+
+<div class="selected" id="pSel">
+尚未選牌
+</div>
+
 <div class="cards" id="pButtons"></div>
-<div class="side-title">莊牌 <span id="bCount">0/3</span></div>
-<div class="selected" id="bSel">尚未選牌</div>
+
+<div class="side-title">
+莊牌 <span id="bCount">0/3</span>
+</div>
+
+<div class="selected" id="bSel">
+尚未選牌
+</div>
+
 <div class="cards" id="bButtons"></div>
+
 <div class="actions">
-<button class="secondary" onclick="clearInput()">清除本局</button>
-<button onclick="confirmRound()">✅ 確認本局</button>
+
+<button class="secondary" onclick="clearInput()">
+清除本局
+</button>
+
+<button onclick="confirmRound()">
+✅ 確認本局
+</button>
+
 </div>
-<div class="note">依照實際發牌順序輸入即可；程式會依標準百家樂第三張牌規則計算。</div>
+
+<div class="note">
+依照實際發牌順序點選牌面即可。
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>③ 牌靴統計</h2>
+
 <div class="grid3">
-<div class="stat"><span>已發牌</span><b id="dealt">0</b></div>
-<div class="stat"><span>剩餘牌</span><b id="left">416</b></div>
-<div class="stat"><span>局數</span><b id="rounds">0</b></div>
+
+<div class="stat">
+<span>已發牌</span>
+<b id="dealt">0</b>
 </div>
+
+<div class="stat">
+<span>剩餘牌</span>
+<b id="left">416</b>
+</div>
+
+<div class="stat">
+<span>局數</span>
+<b id="rounds">0</b>
+</div>
+
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>④ 剩餘牌理論機率</h2>
 <div class="grid3">
 <div class="prob"><span>莊</span><b id="bp">—</b></div>
 <div class="prob"><span>閒</span><b id="pp">—</b></div>
 <div class="prob"><span>和</span><b id="tp">—</b></div>
 </div>
-<div class="note">這裡是「依目前剩餘牌組成」估算的下一局理論機率，不是預測結果，也不代表保證獲利。為了手機速度，使用蒙地卡羅模擬，每次約 20,000 局。</div>
-<button class="secondary" onclick="calcProbability(true)">🔄 重新估算</button>
+
+<div class="note">
+這裡是依目前剩餘牌組成計算的下一局理論機率，不是預測結果，也不代表保證獲利。
+</div>
+
+<button class="secondary" onclick="calcProbability(true)">
+🔄 重新估算
+</button>
+
 </div>
 
 <div class="card">
+
 <h2>⑤ 本局結果</h2>
-<div class="result" id="result">等待輸入</div>
+
+<div class="result" id="result">
+等待輸入
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>⑥ 大路</h2>
-<div class="roadbox"><div class="road" id="road"></div></div>
-<div class="note">莊、閒勝各佔一格；和局以綠色數字標在最後一格。</div>
+
+<div class="roadbox">
+<div class="road" id="road"></div>
+</div>
+
+<div class="note">
+莊、閒勝各佔一格；和局以綠色數字標在最後一格。
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>⑦ 投注紀錄（可選）</h2>
+
 <div class="grid2">
-<div><label>本局下注</label><input id="bet" inputmode="decimal" placeholder="例如 500"></div>
-<div><label>下注方向</label><select id="betSide"><option value="B">莊</option><option value="P">閒</option><option value="T">和</option></select></div>
+
+<div>
+<label>本局下注</label>
+<input id="bet" inputmode="decimal" placeholder="例如 500">
 </div>
+
+<div>
+<label>下注方向</label>
+<select id="betSide">
+<option value="B">莊</option>
+<option value="P">閒</option>
+<option value="T">和</option>
+</select>
+</div>
+
+</div>
+
 <div class="grid2">
-<div><label>單局結果盈虧</label><input id="profit" inputmode="decimal" placeholder="例如 +475 / -500"></div>
-<div><label>累計盈虧</label><input id="totalProfit" readonly></div>
+
+<div>
+<label>單局結果盈虧</label>
+<input id="profit" inputmode="decimal" placeholder="例如 +475 / -500">
 </div>
-<button class="gold" onclick="saveBet()">💰 記錄本局盈虧</button>
-<div class="note">投注功能只做資金紀錄，不提供保證獲利的下注指示。</div>
+
+<div>
+<label>累計盈虧</label>
+<input id="totalProfit" readonly>
+</div>
+
+</div>
+
+<button class="gold" onclick="saveBet()">
+💰 記錄本局盈虧
+</button>
+
+<div class="note">
+投注功能只做資金紀錄，不提供保證獲利的下注指示。
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>⑧ 完整牌局紀錄</h2>
-<div class="history" id="history"><div class="note">尚無紀錄</div></div>
+
+<div class="history" id="history">
+<div class="note">尚無紀錄</div>
 </div>
+
+</div>
+
 </div>
 
 <script>
-const VALUES=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-let counts={}, rounds=[], inputP=[], inputB=[], road=[], totalProfit=0;
-let currentBet={amount:0,side:"B",profit:null};
 
-function newCounts(decks){let c={};VALUES.forEach(v=>c[v]=4*decks);return c}
-function shoeSize(){return Number(decks.value)*52}
-function resetState(){counts=newCounts(Number(decks.value));rounds=[];inputP=[];inputB=[];road=[];totalProfit=0;currentBet={amount:0,side:"B",profit:null};render();calcProbability(false)}
-function save(){try{localStorage.setItem("baccarat_full_v1",JSON.stringify({decks:decks.value,counts,rounds,road,totalProfit}))}catch(e){}}
-function load(){try{let x=JSON.parse(localStorage.getItem("baccarat_full_v1"));if(x){decks.value=x.decks||"8";counts=x.counts||newCounts(Number(decks.value));rounds=x.rounds||[];road=x.road||[];totalProfit=x.totalProfit||0;return true}}catch(e){}return false}
-function init(){if(!load()) counts=newCounts(Number(decks.value));render();calcProbability(false)}
-function resetAll(){if(confirm("確定重置整靴？所有牌局與盈虧紀錄會清除。")){resetState();save()}}
-decks.addEventListener("change",()=>{if(confirm("切換靴數會重置目前牌靴，確定嗎？")){resetState();save()}else{decks.value=decks.value==="6"?"8":"6"}})
+const VALUES=[
+"A","2","3","4","5","6","7","8","9","10","J","Q","K"
+];
+
+let counts={};
+let rounds=[];
+let inputP=[];
+let inputB=[];
+let road=[];
+let totalProfit=0;
+
+function newCounts(decks){
+let c={};
+VALUES.forEach(v=>c[v]=4*decks);
+return c;
+}
+
+function shoeSize(){
+return Number(decks.value)*52;
+}
+
+function save(){
+try{
+localStorage.setItem(
+"baccarat_full_v2",
+JSON.stringify({
+decks:decks.value,
+counts,
+rounds,
+road,
+totalProfit
+})
+);
+}catch(e){}
+}
+
+function load(){
+try{
+let x=JSON.parse(
+localStorage.getItem("baccarat_full_v2")
+);
+
+if(x){
+decks.value=x.decks||"8";
+counts=x.counts||newCounts(Number(decks.value));
+rounds=x.rounds||[];
+road=x.road||[];
+totalProfit=x.totalProfit||0;
+return true;
+}
+
+}catch(e){}
+
+return false;
+}
+
+function resetState(){
+
+counts=newCounts(Number(decks.value));
+rounds=[];
+inputP=[];
+inputB=[];
+road=[];
+totalProfit=0;
+
+render();
+calcProbability(false);
+}
+
+function resetAll(){
+
+if(confirm("確定重置整靴？所有牌局與盈虧紀錄會清除。")){
+
+resetState();
+save();
+
+}
+
+}
+
+function undo(){
+
+if(!rounds.length)return;
+
+let x=rounds.pop();
+
+[
+...x.pCards,
+...x.bCards
+].forEach(c=>counts[c]++);
+
+road=[];
+
+rounds.forEach(x=>{
+addRoad(x.o);
+});
+
+render();
+save();
+calcProbability(false);
+
+}
 
 function makeButtons(){
-  ["pButtons","bButtons"].forEach((id,idx)=>{
-    const el=document.getElementById(id);el.innerHTML="";
-    VALUES.forEach(v=>{let b=document.createElement("button");b.textContent=v;b.onclick=()=>pick(idx===0?"P":"B",v);el.appendChild(b)})
-  })
+
+["pButtons","bButtons"].forEach((id,idx)=>{
+
+const el=document.getElementById(id);
+
+el.innerHTML="";
+
+VALUES.forEach(v=>{
+
+let b=document.createElement("button");
+
+b.textContent=v;
+
+b.onclick=()=>pick(
+idx===0?"P":"B",
+v
+);
+
+el.appendChild(b);
+
+});
+
+});
+
 }
+
 function pick(side,v){
-  let arr=side==="P"?inputP:inputB;
-  if(arr.length>=3)return;
-  let temp={...counts,[...inputP,...inputB].map(x=>x)[0]:counts[[...inputP,...inputB].map(x=>x)[0]]};
-  let used=[...inputP,...inputB].filter(x=>x===v).length;
-  if(used>=counts[v]){alert("這張牌已經沒有足夠的剩餘數量。");return}
-  arr.push(v);renderInput()
+
+let arr=side==="P"?inputP:inputB;
+
+if(arr.length>=3)return;
+
+let used=[
+...inputP,
+...inputB
+].filter(x=>x===v).length;
+
+if(used>=counts[v]){
+
+alert("這張牌已經沒有足夠的剩餘數量。");
+
+return;
+
 }
+
+arr.push(v);
+
+renderInput();
+
+}
+
 function renderInput(){
-  pSel.textContent=inputP.length?inputP.join("  "):"尚未選牌";
-  bSel.textContent=inputB.length?inputB.join("  "):"尚未選牌";
-  pCount.textContent=inputP.length+"/3";bCount.textContent=inputB.length+"/3";
-}
-function clearInput(){inputP=[];inputB=[];renderInput()}
 
-function val(c){return c==="A"?1:["10","J","Q","K"].includes(c)?0:Number(c)}
-function pt(a){return a.reduce((s,c)=>s+val(c),0)%10}
-function outcome(p,b){return p>b?"P":b>p?"B":"T"}
+pSel.textContent=
+inputP.length?
+inputP.join("  "):
+"尚未選牌";
+
+bSel.textContent=
+inputB.length?
+inputB.join("  "):
+"尚未選牌";
+
+pCount.textContent=
+inputP.length+"/3";
+
+bCount.textContent=
+inputB.length+"/3";
+
+}
+
+function clearInput(){
+
+inputP=[];
+inputB=[];
+
+renderInput();
+
+}
+
+function val(c){
+
+if(c==="A")return 1;
+
+if(
+["10","J","Q","K"].includes(c)
+)return 0;
+
+return Number(c);
+
+}
+
+function pt(a){
+
+return a.reduce(
+(s,c)=>s+val(c),
+0
+)%10;
+
+}
+
+function outcome(p,b){
+
+if(p>b)return "P";
+
+if(b>p)return "B";
+
+return "T";
+
+}
+
 function validInput(){
-  if(inputP.length<2||inputP.length>3||inputB.length<2||inputB.length>3)return false;
-  let temp={...counts};for(let c of [...inputP,...inputB]){if((temp[c]||0)<=0)return false;temp[c]--}return true
+
+if(
+inputP.length<2||
+inputP.length>3||
+inputB.length<2||
+inputB.length>3
+)return false;
+
+let temp={...counts};
+
+for(let c of [
+...inputP,
+...inputB
+]){
+
+if((temp[c]||0)<=0)return false;
+
+temp[c]--;
+
 }
+
+return true;
+
+}
+
 function confirmRound(){
-  if(!validInput()){alert("請確認莊、閒各有 2～3 張牌，且牌靴內還有這些牌。");return}
-  let cards=[...inputP,...inputB],temp={...counts};
-  for(let c of cards){temp[c]--;counts[c]--}
-  let p=pt(inputP),b=pt(inputB),o=outcome(p,b);
-  rounds.push({pCards:[...inputP],bCards:[...inputB],p,b,o,profit:null,bet:null,side:null});
-  addRoad(o);
-  inputP=[];inputB=[];
-  render();save();calcProbability(false)
+
+if(!validInput()){
+
+alert(
+"請確認莊、閒各有 2～3 張牌，且牌靴內還有這些牌。"
+);
+
+return;
+
 }
+
+let cards=[
+...inputP,
+...inputB
+];
+
+for(let c of cards){
+counts[c]--;
+}
+
+let p=pt(inputP);
+let b=pt(inputB);
+let o=outcome(p,b);
+
+rounds.push({
+
+pCards:[...inputP],
+bCards:[...inputB],
+p,
+b,
+o,
+profit:null,
+bet:null,
+side:null
+
+});
+
+addRoad(o);
+
+inputP=[];
+inputB=[];
+
+render();
+save();
+calcProbability(false);
+
+}
+
 function addRoad(o){
-  if(o==="T"){if(road.length)road[road.length-1].ties=(road[road.length-1].ties||0)+1;return}
-  let last=road[road.length-1];
-  if(!last){road.push({r:0,c:0,o,ties:0});return}
-  let r=last.r,c=last.c;
-  if(last.o===o){r++;if(r>5){r=5;c++}while(road.some(x=>x.r===r&&x.c===c))c++}
-  else{c++;r=0;while(road.some(x=>x.r===r&&x.c===c))c++}
-  road.push({r,c,o,ties:0})
-}
-function undo(){
-  if(!rounds.length)return;
-  let x=rounds.pop();
-  [...x.pCards,...x.bCards].forEach(c=>counts[c]++);
-  road=[];
-  rounds.forEach(x=>addRoad(x.o));
-  render();save();calcProbability(false)
+
+if(o==="T"){
+
+if(road.length){
+
+road[
+road.length-1
+].ties=
+(road[road.length-1].ties||0)+1;
+
 }
 
+return;
+
+}
+
+let last=
+road[road.length-1];
+
+if(!last){
+
+road.push({
+r:0,
+c:0,
+o,
+ties:0
+});
+
+return;
+
+}
+
+let r=last.r;
+let c=last.c;
+
+if(last.o===o){
+
+r++;
+
+if(r>5){
+
+r=5;
+c++;
+
+}
+
+while(
+road.some(
+x=>x.r===r&&x.c===c
+)
+)c++;
+
+}else{
+
+c++;
+r=0;
+
+while(
+road.some(
+x=>x.r===r&&x.c===c
+)
+)c++;
+
+}
+
+road.push({
+r,
+c,
+o,
+ties:0
+});
+
+}
 function render(){
-  makeButtons();renderInput();
-  let left=Object.values(counts).reduce((a,b)=>a+b,0);
-  remain.value=left;document.getElementById("left").textContent=left;
-  document.getElementById("dealt").textContent=shoeSize()-left;
-  document.getElementById("rounds").textContent=rounds.length;
-  totalProfit.value=totalProfit>=0?("+"+totalProfit):String(totalProfit);
-  if(rounds.length){let x=rounds[rounds.length-1];let n=x.o==="P"?"閒勝":x.o==="B"?"莊勝":"和局";result.innerHTML=`<span class="${x.o}">${n}</span><small>閒 ${x.p} 點　｜　莊 ${x.b} 點</small>`}else result.textContent="等待輸入";
-  renderRoad();renderHistory()
-}
-function renderRoad(){
-  road.innerHTML="";
-  let cols=Math.max(8,road.length?Math.max(...road.map(x=>x.c))+1:8);
-  road.style.gridTemplateColumns=`repeat(${cols},31px)`;
-  for(let c=0;c<cols;c++)for(let r=0;r<6;r++){
-    let d=road.find(x=>x.c===c&&x.r===r),el=document.createElement("div");el.className="cell";
-    if(d){el.classList.add(d.o);el.textContent=d.o==="P"?"閒":"莊";if(d.ties){let t=document.createElement("span");t.className="tie";t.textContent=d.ties;el.appendChild(t)}}
-    road.appendChild(el)
-  }
-}
-function renderHistory(){
-  document.getElementById("history").innerHTML=rounds.length?rounds.slice().reverse().map((x,i)=>{
-    let n=rounds.length-i,name=x.o==="P"?"閒勝":x.o==="B"?"莊勝":"和局";
-    return `<div class="hist"><div>#${n}<br><span class="small">閒 ${x.pCards.join(" ")}　莊 ${x.bCards.join(" ")}</span></div><div class="right ${x.o}">${name}<br><span class="small">${x.p}:${x.b}${x.profit!==null?`　盈虧 ${x.profit}`:""}</span></div></div>`
-  }).join(""):"<div class='note'>尚無紀錄</div>"
+
+makeButtons();
+renderInput();
+
+let left=Object.values(counts)
+.reduce((a,b)=>a+b,0);
+
+remain.value=left;
+
+document.getElementById("left").textContent=left;
+
+document.getElementById("dealt").textContent=
+shoeSize()-left;
+
+document.getElementById("rounds").textContent=
+rounds.length;
+
+totalProfit.value=
+totalProfit>=0?
+("+"+totalProfit):
+String(totalProfit);
+
+if(rounds.length){
+
+let x=rounds[rounds.length-1];
+
+let n=
+x.o==="P"?"閒勝":
+x.o==="B"?"莊勝":
+"和局";
+
+result.innerHTML=
+`<span class="${x.o}">${n}</span>
+<small>閒 ${x.p} 點　｜　莊 ${x.b} 點</small>`;
+
+}else{
+
+result.textContent="等待輸入";
+
 }
 
-/* 標準百家樂第三張規則 */
+renderRoad();
+renderHistory();
+
+}
+
+function renderRoad(){
+
+road.innerHTML="";
+
+let cols=Math.max(
+8,
+road.length?
+Math.max(...road.map(x=>x.c))+1:
+8
+);
+
+road.style.gridTemplateColumns=
+`repeat(${cols},31px)`;
+
+for(let c=0;c<cols;c++){
+
+for(let r=0;r<6;r++){
+
+let d=road.find(
+x=>x.c===c&&x.r===r
+);
+
+let el=document.createElement("div");
+
+el.className="cell";
+
+if(d){
+
+el.classList.add(d.o);
+
+el.textContent=
+d.o==="P"?"閒":"莊";
+
+if(d.ties){
+
+let t=document.createElement("span");
+
+t.className="tie";
+
+t.textContent=d.ties;
+
+el.appendChild(t);
+
+}
+
+}
+
+road.appendChild(el);
+
+}
+
+}
+
+}
+
+function renderHistory(){
+
+document.getElementById("history").innerHTML=
+
+rounds.length?
+
+rounds.slice().reverse().map((x,i)=>{
+
+let n=rounds.length-i;
+
+let name=
+x.o==="P"?"閒勝":
+x.o==="B"?"莊勝":
+"和局";
+
+return `
+<div class="hist">
+
+<div>
+#${n}<br>
+<span class="small">
+閒 ${x.pCards.join(" ")}
+　莊 ${x.bCards.join(" ")}
+</span>
+</div>
+
+<div class="right ${x.o}">
+${name}<br>
+<span class="small">
+${x.p}:${x.b}
+${x.profit!==null?
+`　盈虧 ${x.profit}`:
+""}
+</span>
+</div>
+
+</div>
+`;
+
+}).join("")
+
+:
+
+"<div class='note'>尚無紀錄</div>";
+
+}
+
 function bankerDraw(b,third){
-  if(b<=2)return true;
-  if(b===3)return third!=="8";
-  if(b===4)return ["2","3","4","5","6","7"].includes(third);
-  if(b===5)return ["4","5","6","7"].includes(third);
-  if(b===6)return ["6","7"].includes(third);
-  return false;
+
+if(b<=2)return true;
+
+if(b===3)return third!=="8";
+
+if(b===4)
+return ["2","3","4","5","6","7"]
+.includes(third);
+
+if(b===5)
+return ["4","5","6","7"]
+.includes(third);
+
+if(b===6)
+return ["6","7"].includes(third);
+
+return false;
+
 }
+
 function simulateOnce(){
-  let deck=[];VALUES.forEach(v=>{for(let i=0;i<counts[v];i++)deck.push(v)});
-  function draw(){return deck.splice(Math.floor(Math.random()*deck.length),1)[0]}
-  let p=[draw(),draw()],b=[draw(),draw()],pp=pt(p),bp=pt(b);
-  if(pp>=8||bp>=8)return outcome(pp,bp);
-  if(pp<=5){
-    let t=draw();p.push(t);pp=pt(p);
-    if(bankerDraw(bp,t))b.push(draw());
-  }else{
-    if(bp<=5)b.push(draw());
-  }
-  return outcome(pt(p),pt(b))
+
+let deck=[];
+
+VALUES.forEach(v=>{
+
+for(let i=0;i<counts[v];i++){
+
+deck.push(v);
+
 }
+
+});
+
+function draw(){
+
+return deck.splice(
+Math.floor(Math.random()*deck.length),
+1
+)[0];
+
+}
+
+let p=[
+draw(),
+draw()
+];
+
+let b=[
+draw(),
+draw()
+];
+
+let pp=pt(p);
+let bp=pt(b);
+
+if(pp>=8||bp>=8)
+return outcome(pp,bp);
+
+if(pp<=5){
+
+let t=draw();
+
+p.push(t);
+
+pp=pt(p);
+
+if(bankerDraw(bp,t))
+b.push(draw());
+
+}else{
+
+if(bp<=5)
+b.push(draw());
+
+}
+
+return outcome(
+pt(p),
+pt(b)
+);
+
+}
+
 function calcProbability(force){
-  let left=Object.values(counts).reduce((a,b)=>a+b,0);
-  if(left<10){bp.textContent=pp.textContent=tp.textContent="—";return}
-  let N=force?30000:12000,res={P:0,B:0,T:0};
-  for(let i=0;i<N;i++)res[simulateOnce()]++;
-  let s=res.P+res.B+res.T;
-  bp.textContent=(res.B/s*100).toFixed(2)+"%";
-  pp.textContent=(res.P/s*100).toFixed(2)+"%";
-  tp.textContent=(res.T/s*100).toFixed(2)+"%";
+
+let left=Object.values(counts)
+.reduce((a,b)=>a+b,0);
+
+if(left<10){
+
+bp.textContent=
+pp.textContent=
+tp.textContent="—";
+
+return;
+
 }
+
+let N=
+force?
+30000:
+12000;
+
+let res={
+P:0,
+B:0,
+T:0
+};
+
+for(let i=0;i<N;i++){
+
+res[
+simulateOnce()
+]++;
+
+}
+
+let s=
+res.P+
+res.B+
+res.T;
+
+bp.textContent=
+(res.B/s*100)
+.toFixed(2)+"%";
+
+pp.textContent=
+(res.P/s*100)
+.toFixed(2)+"%";
+
+tp.textContent=
+(res.T/s*100)
+.toFixed(2)+"%";
+
+}
+
 function saveBet(){
-  let prof=Number(profit.value),betN=Number(bet.value)||0,side=betSide.value;
-  if(!Number.isFinite(prof)){alert("請輸入正確盈虧，例如 +475 或 -500");return}
-  totalProfit+=prof;
-  if(rounds.length){rounds[rounds.length-1].profit=prof;rounds[rounds.length-1].bet=betN;rounds[rounds.length-1].side=side}
-  bet.value="";profit.value="";
-  render();save()
+
+let prof=
+Number(profit.value);
+
+let betN=
+Number(bet.value)||0;
+
+let side=
+betSide.value;
+
+if(!Number.isFinite(prof)){
+
+alert(
+"請輸入正確盈虧，例如 +475 或 -500"
+);
+
+return;
+
 }
+
+totalProfit+=prof;
+
+if(rounds.length){
+
+rounds[
+rounds.length-1
+].profit=prof;
+
+rounds[
+rounds.length-1
+].bet=betN;
+
+rounds[
+rounds.length-1
+].side=side;
+
+}
+
+bet.value="";
+profit.value="";
+
+render();
+save();
+
+}
+
+function init(){
+
+if(!load()){
+
+counts=
+newCounts(
+Number(decks.value)
+);
+
+}
+
+render();
+
+calcProbability(false);
+
+}
+
 init();
+
 </script>
+
 </body>
 </html>
