@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>百家樂計算器</title>
+<style>
+body{
+  background:#111;
+  color:white;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  padding:20px;
+}
+.box{
+  max-width:500px;
+  margin:auto;
+}
+input{
+  width:100%;
+  box-sizing:border-box;
+  padding:15px;
+  margin:8px 0 15px;
+  font-size:20px;
+  border-radius:10px;
+  border:1px solid #555;
+  background:#222;
+  color:white;
+}
+button{
+  width:100%;
+  padding:15px;
+  font-size:18px;
+  border:0;
+  border-radius:10px;
+  background:#5865dc;
+  color:white;
+}
+.result{
+  margin-top:20px;
+  padding:20px;
+  background:#222;
+  border-radius:12px;
+  text-align:center;
+  font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>🃏 百家樂計算器</h1>
+
+<label>閒牌</label>
+<input id="player" placeholder="例如：9 4">
+
+<label>莊牌</label>
+<input id="banker" placeholder="例如：K 7">
+
+<button onclick="calculate()">確認本局</button>
+
+<div id="result" class="result">
+等待輸入
+</div>
+
+</div>
+
+<script>
+
+function cardValue(card){
+
+    card = card.toUpperCase();
+
+    if(card === "A") return 1;
+
+    if(["10","J","Q","K"].includes(card))
+        return 0;
+
+    return Number(card);
+}
+
+function getPoint(text){
+
+    let cards = text
+        .toUpperCase()
+        .trim()
+        .split(/[\s,，、]+/)
+        .filter(Boolean);
+
+    let total = 0;
+
+    for(let card of cards){
+        total += cardValue(card);
+    }
+
+    return total % 10;
+}
+
+function calculate(){
+
+    let player = document.getElementById("player").value;
+    let banker = document.getElementById("banker").value;
+
+    if(!player || !banker){
+
+        document.getElementById("result").innerHTML =
+        "⚠️ 請輸入莊、閒牌面";
+
+        return;
+    }
+
+    let p = getPoint(player);
+    let b = getPoint(banker);
+
+    let result;
+
+    if(p > b)
+        result = "閒勝";
+    else if(b > p)
+        result = "莊勝";
+    else
+        result = "和局";
+
+    document.getElementById("result").innerHTML =
+        "閒：" + p + " 點<br>" +
+        "莊：" + b + " 點<br><br>" +
+        "<strong>" + result + "</strong>";
+}
+
+</script>
+
+</body>
+</html>
