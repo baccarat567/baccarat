@@ -945,9 +945,8 @@ remain.value=left;
 
 document.getElementById("left").textContent=left;
 
-document.getElementById("dealt").textContent=
-shoeSize()-left;
-
+document.getElementById("dealt").textContent =
+decks.value==="unknown" ? "—" : shoeSize()-left;
 document.getElementById("rounds").textContent=
 rounds.length;
 
