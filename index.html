@@ -575,7 +575,7 @@ function newCounts(decks){
     let c={};
 
     VALUES.forEach(v=>{
-        c[v]=decks==="unknown" ? 4 : 4*Number(decks);
+        c[v]=decks==="unknown" ? 32 : 4*Number(decks);
     });
 
     return c;
