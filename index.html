@@ -1166,14 +1166,13 @@ function calcProbability(force){
         .reduce((a,b)=>a+b,0);
 
     if(left < 10){
-
         bpEl.textContent = "—";
         ppEl.textContent = "—";
         tpEl.textContent = "—";
-
         return;
     }
 
+    // 模擬次數
     const N = force ? 30000 : 12000;
 
     const res = {
@@ -1195,31 +1194,88 @@ function calcProbability(force){
         else{
             res.T++;
         }
-
     }
 
-    const total =
-        res.P +
-        res.B +
-        res.T;
+    const total = res.P + res.B + res.T;
 
     if(total === 0){
-
         bpEl.textContent = "—";
         ppEl.textContent = "—";
         tpEl.textContent = "—";
-
         return;
     }
 
-    bpEl.textContent =
-        (res.B / total * 100).toFixed(2) + "%";
+    const banker = res.B / total * 100;
+    const player = res.P / total * 100;
+    const tie = res.T / total * 100;
 
-    ppEl.textContent =
-        (res.P / total * 100).toFixed(2) + "%";
+    // 顯示基本機率
+    bpEl.textContent = banker.toFixed(2) + "%";
+    ppEl.textContent = player.toFixed(2) + "%";
+    tpEl.textContent = tie.toFixed(2) + "%";
 
-    tpEl.textContent =
-        (res.T / total * 100).toFixed(2) + "%";
+    // 莊閒差距
+    const diff = banker - player;
+    const absDiff = Math.abs(diff);
+
+    // 判斷目前方向
+    let direction = "";
+    let level = "";
+
+    if(absDiff <= 0.5){
+        direction = "⚪ 均勢";
+        level = "差距非常小";
+    }
+    else if(absDiff <= 1.5){
+        direction = diff > 0 ? "🟡 輕微偏莊" : "🟡 輕微偏閒";
+        level = "差距偏小";
+    }
+    else if(absDiff <= 3){
+        direction = diff > 0 ? "🟠 明顯偏莊" : "🟠 明顯偏閒";
+        level = "差距較明顯";
+    }
+    else{
+        direction = diff > 0 ? "🔴 強烈偏莊" : "🔴 強烈偏閒";
+        level = "差距較大";
+    }
+
+    // 尋找方向顯示區
+    let directionEl = document.getElementById("directionResult");
+
+    if(!directionEl){
+
+        directionEl = document.createElement("div");
+
+        directionEl.id = "directionResult";
+
+        directionEl.style.marginTop = "12px";
+        directionEl.style.padding = "12px";
+        directionEl.style.borderRadius = "12px";
+        directionEl.style.background = "rgba(255,255,255,0.06)";
+        directionEl.style.textAlign = "center";
+        directionEl.style.fontSize = "16px";
+
+        const probabilityBox = bpEl.closest(".card") || bpEl.parentElement;
+
+        if(probabilityBox){
+            probabilityBox.appendChild(directionEl);
+        }
+    }
+
+    directionEl.innerHTML =
+        "<div style='font-size:13px;opacity:.7;margin-bottom:5px;'>目前方向</div>" +
+        "<div style='font-size:22px;font-weight:bold;'>" +
+        direction +
+        "</div>" +
+        "<div style='margin-top:7px;'>" +
+        "莊－閒：<b>" +
+        (diff >= 0 ? "+" : "") +
+        diff.toFixed(2) +
+        "%</b>" +
+        "</div>" +
+        "<div style='font-size:12px;opacity:.6;margin-top:4px;'>" +
+        level +
+        "</div>";
 }
 
 function saveBet(){
