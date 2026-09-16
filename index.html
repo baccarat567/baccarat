@@ -987,10 +987,200 @@ result.textContent="等待輸入";
 }
 
 renderRoad();
+analyzeRoad();
 renderHistory();
 
 }
+function analyzeRoad(){
 
+    const box=document.getElementById("roadAnalysis");
+
+    if(!box) return;
+
+    // 只取莊、閒，和局不算進走勢
+    const results=rounds
+        .map(x=>x.o)
+        .filter(x=>x==="B"||x==="P");
+
+    if(results.length===0){
+        box.innerHTML="等待牌局資料";
+        return;
+    }
+
+    // 最近資料
+    const last5=results.slice(-5);
+    const last10=results.slice(-10);
+    const last20=results.slice(-20);
+
+    function count(arr,type){
+        return arr.filter(x=>x===type).length;
+    }
+
+    // 目前連續
+    const current=results[results.length-1];
+
+    let streak=0;
+
+    for(let i=results.length-1;i>=0;i--){
+
+        if(results[i]===current){
+            streak++;
+        }else{
+            break;
+        }
+
+    }
+
+    // 前一段連續
+    let previousStreak=0;
+
+    for(
+        let i=results.length-1-streak;
+        i>=0;
+        i--
+    ){
+
+        if(results[i]!==current){
+            previousStreak++;
+        }else{
+            break;
+        }
+
+    }
+
+    // 單跳：最近至少6局完全莊閒交替
+    let singleJump=false;
+
+    if(results.length>=6){
+
+        const a=results.slice(-6);
+
+        singleJump=a.every(
+            (x,i)=>i===0||x!==a[i-1]
+        );
+
+    }
+
+    // 雙跳：BBPPBB 或 PPBBPP
+    let doubleJump=false;
+
+    if(results.length>=6){
+
+        const a=results.slice(-6);
+
+        doubleJump=
+            a[0]===a[1] &&
+            a[2]===a[3] &&
+            a[4]===a[5] &&
+            a[0]!==a[2] &&
+            a[2]!==a[4];
+
+    }
+
+    // 長龍
+    const longDragon=streak>=4;
+
+    // 斷龍／轉折
+    const turning=
+        streak===1 &&
+        previousStreak>=3;
+
+    // 最近比例
+    const b5=count(last5,"B");
+    const p5=count(last5,"P");
+
+    const b10=count(last10,"B");
+    const p10=count(last10,"P");
+
+    const b20=count(last20,"B");
+    const p20=count(last20,"P");
+
+    // 型態文字
+    let pattern=[];
+
+    if(longDragon){
+        pattern.push(
+            current==="B"
+            ? "莊連"
+            : "閒連"
+        );
+
+        if(streak>=4){
+            pattern.push(
+                streak>=6
+                ? "長龍"
+                : "連續走勢"
+            );
+        }
+    }
+
+    if(singleJump){
+        pattern.push("單跳");
+    }
+
+    if(doubleJump){
+        pattern.push("雙跳");
+    }
+
+    if(turning){
+        pattern.push("斷龍／轉折");
+    }
+
+    if(pattern.length===0){
+        pattern.push("目前無明顯固定型態");
+    }
+
+    // 牌路方向參考
+    let direction="⚪ 均勢";
+    let directionClass="";
+
+    if(b10-p10>=3){
+
+        direction="🔴 近期偏莊";
+
+    }else if(p10-b10>=3){
+
+        direction="🔵 近期偏閒";
+
+    }else{
+
+        direction="⚪ 莊閒接近";
+
+    }
+
+    box.innerHTML=`
+
+    <div style="font-size:20px;font-weight:700;margin-bottom:10px">
+        ${pattern.join(" ＋ ")}
+    </div>
+
+    <div style="margin-bottom:8px">
+        目前：${current==="B"?"莊":"閒"}
+        ${streak} 連
+    </div>
+
+    <div style="margin-bottom:8px">
+        最近5局：
+        莊 ${b5} ／ 閒 ${p5}
+    </div>
+
+    <div style="margin-bottom:8px">
+        最近10局：
+        莊 ${b10} ／ 閒 ${p10}
+    </div>
+
+    <div style="margin-bottom:8px">
+        最近20局：
+        莊 ${b20} ／ 閒 ${p20}
+    </div>
+
+    <div style="margin-top:10px;font-weight:700">
+        ${direction}
+    </div>
+
+    `;
+
+}
 function renderRoad(){
 
 road.innerHTML="";
